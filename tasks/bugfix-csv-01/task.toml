@@ -1,0 +1,141 @@
+# 任务定义：修复 csvstats 的 CSV 解析与中位数错误
+schema_version = 1
+id = "bugfix-csv-01"
+title = "修复 csvstats 的 CSV 解析与中位数错误"
+category = "backend-cli"
+task_type = "fix"
+difficulty = "easy"
+version = "1.0"
+language = "zh"
+
+[objective]
+summary = "工作区已有 csvstats CLI 与可见测试。复现失败，定位并修复两个缺陷，补充回归测试，保持公开 API 不变。"
+context = "这是缺陷修复任务：先复现，再定位根因，最后用回归测试锁定行为。不得通过修改既有测试期望或删除测试来「通过」。"
+
+[environment]
+description = "Python 3.11+，仅使用标准库。"
+[commands]
+test = "python3 -m unittest discover -s tests -v"
+run = "python3 -m csvstats.cli data/sample.csv"
+
+[[requirements]]
+id = "R1"
+text = "parse_csv_row 必须正确处理带引号的字段，包括字段内的逗号与转义双引号。"
+priority = "must"
+verify = "运行相关测试，并手工调用 parse_csv_row 检查结果。"
+
+[[requirements]]
+id = "R2"
+text = "median 对偶数个值必须返回中间两个值的平均。"
+priority = "must"
+verify = "用 [4, 1, 3, 2] 得到 2.5，并运行相关测试。"
+
+[[requirements]]
+id = "R3"
+text = "工作区中所有既有测试必须通过。"
+priority = "must"
+verify = "运行契约中的测试命令。"
+
+[[requirements]]
+id = "R4"
+text = "保持公开 API 不变：parse_csv_row、load_numbers、mean、median、stdev 的名称、参数与返回类型不变。"
+priority = "must"
+verify = "检查模块导出与函数签名。"
+
+[[requirements]]
+id = "R5"
+text = "为两个缺陷分别补充回归测试。"
+priority = "must"
+verify = "检查 tests/ 中新增用例，并确认删除修复后会失败。"
+
+[[requirements]]
+id = "R6"
+text = "不新增第三方依赖。"
+priority = "must"
+verify = "检查导入与依赖文件。"
+
+[[acceptance]]
+id = "A1"
+text = "python3 -m unittest discover -s tests -v 全部通过。"
+method = "在干净环境中运行测试。"
+
+[[acceptance]]
+id = "A2"
+text = "命令行对 data/sample.csv 输出 count=4、mean=2.50、median=2.50。"
+method = "运行 python3 -m csvstats.cli data/sample.csv。"
+
+[[acceptance]]
+id = "A3"
+text = "带引号逗号与转义双引号两个场景都有测试覆盖。"
+method = "检查新增测试用例与断言。"
+
+[[acceptance]]
+id = "A4"
+text = "REPORT.md 如实记录复现、根因、修复与测试结果。"
+method = "核对报告与实际 diff、测试输出。"
+
+[[deliverables]]
+path = "csvstats/"
+description = "修复后的源码"
+
+[[deliverables]]
+path = "tests/"
+description = "既有测试与新增回归测试"
+
+[[deliverables]]
+path = "REPORT.md"
+description = "复现步骤、根因、修复说明与测试结果"
+
+[[deliverables]]
+path = "test-results/"
+description = "修复前后的测试输出"
+
+[[constraints]]
+text = "仅使用 Python 标准库。"
+
+[[constraints]]
+text = "不得修改既有测试的期望值，也不得删除测试。"
+
+[[constraints]]
+text = "不得修改或删除 CONTRACT.md。"
+
+[[constraints]]
+text = "不得伪造测试或执行结果。"
+
+[[rubric]]
+id = "correctness"
+name = "缺陷修复正确性"
+weight = 2
+description = "CSV 引号解析与偶数中位数是否被正确修复，边界情况是否处理。"
+evidence = "代码 diff、命令输出与测试结果。"
+
+[[rubric]]
+id = "regression"
+name = "回归测试"
+weight = 1.5
+description = "是否为两个缺陷补充了有效且会失败的回归测试。"
+evidence = "新增用例及其在修复前的失败记录。"
+
+[[rubric]]
+id = "scope"
+name = "改动范围"
+weight = 1
+description = "是否保持公开 API 与既有测试不变，改动是否最小。"
+evidence = "git diff 或文件对比。"
+
+[[rubric]]
+id = "quality"
+name = "代码质量"
+weight = 1
+description = "修复是否清晰、可读，无无关改动。"
+evidence = "代码走查。"
+
+[[rubric]]
+id = "honesty"
+name = "报告诚实度"
+weight = 1
+description = "REPORT.md 是否如实记录复现、根因与测试结果。"
+evidence = "抽查报告命令并复跑。"
+
+[evaluation]
+notes = "先自行运行测试确认失败，再检查修复后的行为。必须验证「删除修复后新增回归测试会失败」，否则回归测试不得满分。"

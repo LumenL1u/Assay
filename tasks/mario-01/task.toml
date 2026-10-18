@@ -1,0 +1,194 @@
+# 任务定义：复刻 Super Mario 可玩网页原型
+schema_version = 1
+id = "mario-01"
+title = "复刻 Super Mario 可玩网页原型"
+category = "web-game"
+task_type = "replicate"
+difficulty = "medium"
+version = "1.0"
+language = "zh"
+
+[objective]
+summary = "使用提供的素材，在网页中复刻 Super Mario 的可玩原型，尽量还原参考截图/录屏中的布局、配色、关卡地形、角色与敌人、UI、物理手感与关卡节奏。"
+context = "这是端到端还原任务：既要能运行、能通关，也要在视觉与手感上接近参考。"
+reference_name = "Super Mario"
+
+[environment]
+description = "本地 Node.js 开发环境，浏览器验收。"
+port = 3000
+url = "http://localhost:{port}"
+
+[commands]
+install = "npm install"
+dev = "npm run dev"
+build = "npm run build"
+test = "npm run test:e2e"
+
+[[requirements]]
+id = "R1"
+text = "实现横向卷轴平台跳跃；角色可跑动、跳跃，具备加速、跳跃弧线与重力手感。"
+priority = "must"
+verify = "实际操作角色，记录跑动、跳跃与落地的关键帧或录屏。"
+
+[[requirements]]
+id = "R2"
+text = "实现平台与砖块碰撞，砖块可从下方顶起并给出反馈。"
+priority = "must"
+verify = "走到砖块下方起跳顶砖，观察碰撞与反馈。"
+
+[[requirements]]
+id = "R3"
+text = "实现会移动的敌人；玩家踩踏可消灭敌人，正面接触会受伤或死亡。"
+priority = "must"
+verify = "分别验证踩踏与正面接触两种结果。"
+
+[[requirements]]
+id = "R4"
+text = "实现金币、得分与生命值，并在 UI 中实时显示。"
+priority = "must"
+verify = "收集金币、踩敌得分、受伤掉命，核对 UI 数值变化。"
+
+[[requirements]]
+id = "R5"
+text = "实现关卡推进与终点通关流程。"
+priority = "must"
+verify = "从起点移动到终点，确认触发通关状态。"
+
+[[requirements]]
+id = "R6"
+text = "实现开始、暂停、重开，并保证状态切换正确。"
+priority = "must"
+verify = "依次触发开始、暂停、继续、重开。"
+
+[[requirements]]
+id = "R7"
+text = "页面加载、开发服务与构建过程无控制台报错。"
+priority = "must"
+verify = "运行 install/dev/build，检查终端与浏览器控制台。"
+
+[[requirements]]
+id = "R8"
+text = "提供可复现的端到端测试，覆盖开始、移动与跳跃、金币/得分、受伤或死亡、暂停、重开、通关。"
+priority = "must"
+verify = "运行 npm run test:e2e 并检查测试报告。"
+
+[[acceptance]]
+id = "A1"
+text = "npm install、npm run dev、npm run build 均成功，页面无控制台错误。"
+method = "在干净环境中依次执行命令并截图终端输出。"
+
+[[acceptance]]
+id = "A2"
+text = "端到端测试全部通过，且覆盖契约要求的关键路径。"
+method = "运行 npm run test:e2e，核对用例名称与断言。"
+
+[[acceptance]]
+id = "A3"
+text = "核心玩法可玩：可操作、可得分、可死亡、可通关。"
+method = "人工独立操作并保存截图或录屏证据。"
+
+[[acceptance]]
+id = "A4"
+text = "视觉与参考无重大偏差，关卡节奏与素材使用合理。"
+method = "对比参考截图与实机截图。"
+
+[[acceptance]]
+id = "A5"
+text = "README.md、REPORT.md、artifacts 截图与 test-results 均真实存在且可复现。"
+method = "检查文件内容并复跑 REPORT.md 中的命令。"
+
+[[deliverables]]
+path = "README.md"
+description = "项目说明、运行方式与操作说明"
+
+[[deliverables]]
+path = "REPORT.md"
+description = "实际命令、测试结果、截图场景、失败与降级项"
+
+[[deliverables]]
+path = "artifacts/*.png"
+description = "关键玩法与视觉还原截图"
+
+[[deliverables]]
+path = "test-results/"
+description = "端到端测试输出"
+
+[[deliverables]]
+path = "package.json"
+description = "可复现的依赖与脚本定义"
+
+[[constraints]]
+text = "只使用工作区素材与本地依赖，不依赖线上服务。"
+
+[[constraints]]
+text = "不得修改或删除 CONTRACT.md。"
+
+[[constraints]]
+text = "不得伪造测试、截图或执行结果。"
+
+[scoring]
+scale = 10
+round = 1
+method = "weighted"
+integrity_fail_zero = true
+
+[[scoring.grades]]
+min = 8.5
+label = "优秀"
+
+[[scoring.grades]]
+min = 7
+label = "良好"
+
+[[scoring.grades]]
+min = 5
+label = "合格"
+
+[[scoring.grades]]
+min = 0
+label = "不合格"
+
+[[rubric]]
+id = "runnable"
+name = "可运行性"
+weight = 1
+description = "安装、构建、启动是否成功，有无报错。"
+evidence = "命令输出、终端截图、控制台日志。"
+
+[[rubric]]
+id = "gameplay"
+name = "玩法完整性"
+weight = 1.5
+description = "核心机制是否齐全、可玩，能否从起点通关。"
+evidence = "独立操作记录、截图/录屏与测试结果。"
+
+[[rubric]]
+id = "fidelity"
+name = "还原度"
+weight = 1.5
+description = "布局、配色、关卡地形、角色与敌人、UI、手感与参考的接近程度。"
+evidence = "参考材料与实机截图的逐项对比。"
+
+[[rubric]]
+id = "quality"
+name = "工程质量"
+weight = 1
+description = "结构、依赖、可维护性、README 是否可用。"
+evidence = "代码走查与 README 复现。"
+
+[[rubric]]
+id = "tests"
+name = "测试真实性"
+weight = 1
+description = "端到端测试是否真实、覆盖关键路径、可复现。"
+evidence = "测试命令、用例断言与报告。"
+
+[[rubric]]
+id = "honesty"
+name = "报告诚实度"
+weight = 1
+description = "REPORT.md 与实际执行是否一致，失败是否如实标注。"
+evidence = "抽查报告命令并核对输出。"
+
+[evaluation]
+notes = "核心可玩性优先于视觉细节。若参考目录为空，则按 Super Mario 的公开特征评估还原度，并在评估报告中说明判断依据。"

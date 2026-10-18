@@ -25,6 +25,12 @@ eval-artifacts/
 # 每次渲染都会重写的工作区契约
 tasks/*/workspace/CONTRACT.md
 
+# 任务素材默认不入库（体积或版权原因）；目录结构由 .gitkeep 保留
+tasks/*/assets/*
+tasks/*/reference/*
+!tasks/*/assets/.gitkeep
+!tasks/*/reference/.gitkeep
+
 # 旧版 Mario 专用实现（仅保留在本地，新结构见 tasks/ 与 evalkit/）
 /prompts/
 

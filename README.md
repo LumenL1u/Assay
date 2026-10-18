@@ -1,7 +1,11 @@
-# Agent Eval
+# Assay
 
+[![CI](https://github.com/LumenL1u/Assay/actions/workflows/ci.yml/badge.svg)](https://github.com/LumenL1u/Assay/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
+[![GitHub](https://img.shields.io/badge/GitHub-LumenL1u%2FAssay-181717.svg)](https://github.com/LumenL1u/Assay)
+
+**Assay — 只定义目标，不规定路径的 Agent 能力评测框架。**
 
 用一份结构化任务定义，渲染出「任务契约 + 执行 Agent 指令 + 评估 Agent 指令」，用于评测网页复刻、后端 API、缺陷修复等不同类型的 Agent 任务。
 
@@ -17,11 +21,11 @@
 
 ```bash
 # 查看内置任务
-python3 -m evalkit list
+python3 -m assay list
 
 # 校验并渲染一个任务
-python3 -m evalkit validate --task mario-01
-python3 -m evalkit render --task mario-01 --check-paths
+python3 -m assay validate --task mario-01
+python3 -m assay render --task mario-01 --check-paths
 ```
 
 渲染产物：
@@ -39,20 +43,20 @@ out/mario-01/
 渲染全部任务：
 
 ```bash
-python3 -m evalkit render --all
+python3 -m assay render --all
 ```
 
 也可以安装为命令：
 
 ```bash
 python3 -m pip install -e .
-agent-eval list
+assay list
 ```
 
 ## 评测流程
 
 1. 在 `tasks/<id>/task.toml` 定义目标、需求、验收标准和评分维度。
-2. 运行 `python3 -m evalkit render --task <id>`。
+2. 运行 `python3 -m assay render --task <id>`。
 3. 把 `out/<id>/executor.md` 和 `tasks/<id>/workspace/` 交给执行 Agent。
 4. 把 `out/<id>/evaluator.md` 交给独立的评估 Agent。
 5. 评估 Agent 按评分表输出总分、证据和必须修复项。
@@ -62,8 +66,8 @@ agent-eval list
 ## 目录结构
 
 ```text
-agent-eval/
-├── evalkit/              # 任务加载、校验、渲染与 CLI
+assay/
+├── assay/              # 任务加载、校验、渲染与 CLI
 │   ├── templates/        # 通用提示词模板
 │   └── *.py
 ├── tasks/                # 任务定义
@@ -90,14 +94,14 @@ tasks/<id>/
 ## 添加任务
 
 ```bash
-python3 -m evalkit new --id my-task-01 --title "我的评测任务" --category backend-api
+python3 -m assay new --id my-task-01 --title "我的评测任务" --category backend-api
 ```
 
 编辑 `tasks/my-task-01/task.toml`，补全 `TODO` 后重新渲染：
 
 ```bash
-python3 -m evalkit validate --task my-task-01
-python3 -m evalkit render --task my-task-01 --check-paths
+python3 -m assay validate --task my-task-01
+python3 -m assay render --task my-task-01 --check-paths
 ```
 
 任务定义只回答「做成什么样算成功」，不写实现步骤。技术栈、目录结构、测试方式、运行命令都留给执行 Agent 决定。
@@ -204,7 +208,7 @@ label = "F"
 
 ## 自定义提示词
 
-模板位于 `evalkit/templates/`，直接修改对所有任务生效。也可以复制到自定义目录后用 `--templates <dir>` 覆盖。
+模板位于 `assay/templates/`，直接修改对所有任务生效。也可以复制到自定义目录后用 `--templates <dir>` 覆盖。
 
 任务级补充内容用 `[[section]]`：
 
@@ -222,8 +226,8 @@ python3 -m pip install -e ".[dev]"
 
 python3 -m ruff check .
 python3 -m unittest discover -s tests -v
-python3 -m evalkit validate --all
-python3 -m evalkit render --all --check-only
+python3 -m assay validate --all
+python3 -m assay render --all --check-only
 ```
 
 提交信息使用 [Conventional Commits](https://www.conventionalcommits.org/)。

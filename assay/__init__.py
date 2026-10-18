@@ -1,4 +1,4 @@
-"""agent-eval: 通用 Agent 任务评测工具。
+"""Assay: 通用 Agent 任务评测工具。
 
 核心思路：任务定义（task.toml）与提示词模板分离，渲染出每个任务的
 契约（CONTRACT.md）、执行 Agent 指令与评估 Agent 指令。

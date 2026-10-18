@@ -28,7 +28,7 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Validate tasks
-        run: python -m evalkit validate --all
+        run: python -m assay validate --all
 
       - name: Check rendering
-        run: python -m evalkit render --all --check-only
+        run: python -m assay render --all --check-only

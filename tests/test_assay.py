@@ -2,14 +2,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from evalkit.render import render_task, render_text
-from evalkit.scaffold import create_task
-from evalkit.task import TaskError, load_task, validate_task
-from evalkit.variables import build_variables
+from assay.render import render_task, render_text
+from assay.scaffold import create_task
+from assay.task import TaskError, load_task, validate_task
+from assay.variables import build_variables
 
 ROOT = Path(__file__).resolve().parent.parent
 TASKS = ROOT / "tasks"
-TEMPLATES = ROOT / "evalkit" / "templates"
+TEMPLATES = ROOT / "assay" / "templates"
 EXAMPLES = ("mario-01", "todo-api-01", "bugfix-csv-01")
 
 
@@ -44,7 +44,7 @@ class TaskLoadingTests(unittest.TestCase):
 
     def test_mario_variables(self):
         task = load_task(TASKS / "mario-01")
-        variables = build_variables(task, Path("/tmp/agent-eval-out"))
+        variables = build_variables(task, Path("/tmp/assay-out"))
         self.assertIn("Super Mario", variables["OBJECTIVE"])
         self.assertIn("R1", variables["REQUIREMENTS_BLOCK"])
         self.assertIn("Σ", variables["SCORING_RULE"])
@@ -56,7 +56,7 @@ class TaskLoadingTests(unittest.TestCase):
 
     def test_task_without_commands_guides_discovery(self):
         task = load_task(TASKS / "bugfix-csv-01")
-        variables = build_variables(task, Path("/tmp/agent-eval-out"))
+        variables = build_variables(task, Path("/tmp/assay-out"))
         self.assertEqual(variables["URL_LINE"], "")
         self.assertIn("项目自带的测试", variables["TEST_STEP"])
         self.assertIn("自行", variables["RUNTIME_STEP"])

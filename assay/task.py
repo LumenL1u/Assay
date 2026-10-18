@@ -3,7 +3,7 @@
 支持 `task.toml`、`task.json`；安装了 PyYAML 时也支持 `task.yaml`。
 
 任务定义只描述「要评什么」，不包含任何具体模板文本。所有面向
-执行/评估 Agent 的措辞都放在 evalkit/templates/ 中，因此同一套模板可以
+执行/评估 Agent 的措辞都放在 assay/templates/ 中，因此同一套模板可以
 评测网页复刻、后端 API、缺陷修复等不同类型的任务。
 """
 

@@ -13,7 +13,7 @@ def run_cli(*args: str, cwd: Path = ROOT) -> subprocess.CompletedProcess[str]:
     existing = env.get("PYTHONPATH")
     env["PYTHONPATH"] = str(ROOT) if not existing else f"{ROOT}{os.pathsep}{existing}"
     return subprocess.run(
-        [sys.executable, "-m", "evalkit", *args],
+        [sys.executable, "-m", "assay", *args],
         cwd=cwd,
         env=env,
         capture_output=True,

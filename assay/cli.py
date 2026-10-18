@@ -220,8 +220,8 @@ def cmd_new(args: argparse.Namespace) -> int:
 
     print(f"[OK] 已创建任务: {target}")
     print(f"     编辑 {target / 'task.toml'}，然后运行:")
-    print(f"     python3 -m evalkit validate --task {args.id}")
-    print(f"     python3 -m evalkit render --task {args.id}")
+    print(f"     python3 -m assay validate --task {args.id}")
+    print(f"     python3 -m assay render --task {args.id}")
     return 0
 
 
@@ -233,7 +233,7 @@ def _add_selection(parser: argparse.ArgumentParser) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="agent-eval",
+        prog="assay",
         description="通用 Agent 任务评测：任务定义、校验与提示词渲染",
     )
     parser.add_argument(

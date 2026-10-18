@@ -8,73 +8,43 @@ from pathlib import Path
 from .task import ID_PATTERN, TaskError
 
 TASK_TEMPLATE = """# 任务定义：{title}
-# 字段说明见 docs/task-schema.md
+# 字段说明见 README。只写目标和验收，不要规定实现路径。
 schema_version = 1
 id = "{task_id}"
 title = {title_toml}
 category = "{category}"
 task_type = "{task_type}"
 difficulty = "medium"
-version = "0.1.0"
 
-[objective]
-summary = "TODO: 用一两句话描述要完成的目标。"
-context = "TODO: 补充背景、输入材料、边界与不做的事。"
-# reference_name = "可选：参考对象名称"
+objective = "TODO: 用一两句话描述要完成的目标；不要规定实现方式。"
 
-[environment]
-description = "TODO: 描述运行环境、依赖与验收方式。"
-# port = 3000
-# url = "http://localhost:{{port}}"
+requirements = [
+  "TODO: 写一条可观察的功能需求。",
+]
 
-[commands]
-# install = "npm install"
-# build = "npm run build"
-# test = "npm test"
-# run = "npm start"
+acceptance = [
+  "TODO: 写一条可由评估 Agent 独立验证的验收标准。",
+]
 
-[[requirements]]
-id = "R1"
-text = "TODO: 写一条可验证的功能需求。"
-priority = "must"
-verify = "TODO: 如何验证这一条"
+deliverables = ["REPORT.md"]
 
-[[acceptance]]
-id = "A1"
-text = "TODO: 写一条可观测的验收标准。"
-method = "TODO: 检查方式"
-
-[[deliverables]]
-path = "REPORT.md"
-description = "实际执行记录、测试结果与已知差异"
+constraints = [
+  "不得修改 CONTRACT.md，不得伪造测试或执行结果。",
+]
 
 [[rubric]]
 id = "correctness"
 name = "正确性"
-weight = 1.5
-description = "交付是否满足功能需求与验收标准"
-evidence = "命令输出、测试结果或人工核验"
+weight = 2
+description = "交付是否满足目标与验收标准。"
+evidence = "实际运行、操作或测试结果。"
 
 [[rubric]]
-id = "quality"
-name = "工程质量"
+id = "honesty"
+name = "报告与自测"
 weight = 1
-description = "结构、可维护性、文档是否达标"
-evidence = "代码走查与 README"
-
-# [[section]]
-# title = "补充说明"
-# content = "仅对特定受众展示的额外约束。"
-# audience = "all"  # all | contract | executor | evaluator
-
-# [evaluation]
-# notes = "给评估 Agent 的补充说明。"
-
-# [scoring]
-# scale = 10
-# round = 1
-# method = "weighted"  # weighted | mean
-# integrity_fail_zero = true
+description = "运行说明是否可复现，结果是否如实记录。"
+evidence = "抽查 REPORT.md 中的命令与输出。"
 """
 
 

@@ -6,6 +6,7 @@
 用一份结构化任务定义，渲染出「任务契约 + 执行 Agent 指令 + 评估 Agent 指令」，用于评测网页复刻、后端 API、缺陷修复等不同类型的 Agent 任务。
 
 - **任务驱动**：新增任务只写一份 `task.toml`，不用复制提示词。
+- **少约束**：只定义目标、验收和评分，不规定技术栈、目录结构和实现路径。
 - **零运行时依赖**：Python 3.11+ 标准库即可运行。
 - **可复现**：契约、提示词、评分维度全部落盘，契约只读。
 - **可审计**：评估 Agent 必须独立执行、给出证据，并做造假检查。
@@ -99,6 +100,8 @@ python3 -m evalkit validate --task my-task-01
 python3 -m evalkit render --task my-task-01 --check-paths
 ```
 
+任务定义只回答「做成什么样算成功」，不写实现步骤。技术栈、目录结构、测试方式、运行命令都留给执行 Agent 决定。
+
 最小任务定义：
 
 ```toml
@@ -108,63 +111,53 @@ title = "实现 Hello API"
 category = "backend-api"
 task_type = "build"
 
-[objective]
-summary = "实现一个返回 JSON 的 HTTP 接口。"
+objective = "实现一个返回 JSON 的 HTTP 接口。技术栈和运行方式由你决定。"
 
-[environment]
-port = 8000
-url = "http://localhost:{port}"
+requirements = [
+  "GET /hello 返回 {\"message\": \"hello\"}。",
+]
 
-[commands]
-install = "npm install"
-test = "npm test"
-run = "npm start"
+acceptance = [
+  "评估 Agent 能按项目说明启动服务并验证响应。",
+]
 
-[[requirements]]
-id = "R1"
-text = "GET /hello 返回 {\"message\": \"hello\"}。"
-priority = "must"
+deliverables = ["REPORT.md"]
 
-[[acceptance]]
-id = "A1"
-text = "服务可启动，接口返回 200 与正确 JSON。"
-
-[[deliverables]]
-path = "REPORT.md"
-description = "实际命令与测试结果"
+constraints = [
+  "不得修改 CONTRACT.md，不得伪造测试或执行结果。",
+]
 
 [[rubric]]
 id = "correctness"
 name = "正确性"
 weight = 2
-description = "接口行为是否符合契约。"
-evidence = "curl 输出与测试结果"
+description = "接口行为是否符合目标与验收标准。"
+evidence = "实际请求与测试结果。"
 
 [[rubric]]
 id = "honesty"
-name = "报告诚实度"
+name = "报告与自测"
 weight = 1
-description = "报告是否与实际执行一致。"
-evidence = "抽查命令与输出"
+description = "运行说明是否可复现，结果是否如实记录。"
+evidence = "抽查 REPORT.md 中的命令与输出。"
 ```
 
-常用字段：
+常用字段（除 `id`、`title`、`objective`、`rubric` 外均可省略）：
 
 | 字段 | 说明 |
 | --- | --- |
 | `id` / `title` / `category` / `task_type` / `difficulty` | 任务基本信息 |
-| `[objective]` | `summary`、`context`、`reference_name` |
-| `[paths]` | `assets`、`reference`、`workspace`，默认即同名目录 |
-| `[environment]` | `description`、`port`、`url`（支持 `{port}`） |
-| `[commands]` | `install`、`build`、`test`、`run`、`dev` 等 |
-| `[[requirements]]` | `id`、`text`、`priority`、`verify` |
-| `[[acceptance]]` | `id`、`text`、`method` |
-| `[[deliverables]]` | `path`、`description` |
+| `objective` | 目标字符串；也可写成 `[objective]` 表，含 `summary` / `context` |
+| `reference_name` | 可选，参考对象名称 |
+| `requirements` | 字符串数组；也可用 `[[requirements]]` 表写 `id` / `text` / `priority` / `verify` |
+| `acceptance` | 字符串数组；也可用 `[[acceptance]]` 表写 `id` / `text` / `method` |
+| `deliverables` | 字符串数组；也可用 `[[deliverables]]` 表写 `path` / `description` |
 | `constraints` | 字符串数组 |
 | `[[rubric]]` | `id`、`name`、`weight`、`description`、`evidence` |
-| `[scoring]` | `scale`、`round`、`method`、`integrity_fail_zero` |
-| `[[section]]` | `title`、`content`、`audience`（`all`/`contract`/`executor`/`evaluator`） |
-| `[evaluation]` | `notes`，仅插入评估指令 |
+| `[paths]` | 可选，默认为任务目录下的 `assets/`、`reference/`、`workspace/` |
+| `[environment]` / `[commands]` | 可选；不写则由执行 Agent 自行决定并记录在报告中 |
+| `[scoring]` | 可选；默认加权平均、10 分制 |
+| `[[section]]` / `[evaluation]` | 可选的补充说明，仅特殊任务需要 |
 
 ## 任务类型
 

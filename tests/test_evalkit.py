@@ -54,12 +54,20 @@ class TaskLoadingTests(unittest.TestCase):
             str((TASKS / "mario-01" / "workspace" / "CONTRACT.md").resolve()),
         )
 
-    def test_task_without_url_gets_generic_steps(self):
+    def test_task_without_commands_guides_discovery(self):
         task = load_task(TASKS / "bugfix-csv-01")
         variables = build_variables(task, Path("/tmp/agent-eval-out"))
         self.assertEqual(variables["URL_LINE"], "")
-        self.assertIn("python3 -m unittest", variables["TEST_STEP"])
-        self.assertIn("python3 -m csvstats.cli", variables["RUNTIME_STEP"])
+        self.assertIn("项目自带的测试", variables["TEST_STEP"])
+        self.assertIn("自行", variables["RUNTIME_STEP"])
+
+    def test_examples_leave_implementation_choices_to_agent(self):
+        for name in EXAMPLES:
+            with self.subTest(task=name):
+                task = load_task(TASKS / name)
+                self.assertEqual(task.commands, {})
+                self.assertFalse(task.environment.get("url"))
+                self.assertEqual(task.deliverables, [{"path": "REPORT.md", "description": ""}])
 
     def test_missing_objective_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:

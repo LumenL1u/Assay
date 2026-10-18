@@ -1,174 +1,46 @@
-# 任务定义：实现 Todo REST API
 schema_version = 1
 id = "todo-api-01"
 title = "实现 Todo REST API"
 category = "backend-api"
 task_type = "build"
 difficulty = "medium"
-version = "1.0"
-language = "zh"
 
-[objective]
-summary = "使用 Node.js 实现一个无数据库依赖的 Todo REST API，支持增删改查、过滤、输入校验与 JSON 文件持久化，并提供可复现的自动化测试。"
-context = "任务考察接口设计、边界条件、错误处理、持久化与测试质量。允许使用任意 npm 框架，但不得依赖外部数据库或在线服务。"
+objective = "实现一个本地可运行的 Todo REST API，支持增删改查、状态过滤、输入校验与持久化。技术栈、接口细节和运行方式由你决定，并在报告中说明。"
 
-[environment]
-description = "本地 Node.js 环境；服务需可通过 npm start 独立启动。"
-port = 8080
-url = "http://localhost:{port}"
+requirements = [
+  "支持 Todo 的创建、列表、读取、更新和删除。",
+  "支持按完成状态过滤；非法输入返回明确的客户端错误，不存在的资源返回 404。",
+  "数据持久化到本地，服务重启后仍可读取。",
+]
 
-[commands]
-install = "npm install"
-test = "npm test"
-run = "npm start"
+acceptance = [
+  "评估 Agent 能按项目说明启动服务，并独立完成 CRUD、过滤、错误处理和重启持久化验证。",
+]
 
-[[requirements]]
-id = "R1"
-text = "提供创建、读取列表、读取单条、更新、删除 Todo 的 HTTP 接口。"
-priority = "must"
-verify = "用 curl 依次调用并核对状态码与响应体。"
+deliverables = ["REPORT.md"]
 
-[[requirements]]
-id = "R2"
-text = "Todo 至少包含 id、title、completed、createdAt 字段；id 唯一且稳定。"
-priority = "must"
-verify = "创建多条记录并检查字段与 id。"
-
-[[requirements]]
-id = "R3"
-text = "支持按 completed 状态过滤列表。"
-priority = "must"
-verify = "分别请求已完成与未完成列表。"
-
-[[requirements]]
-id = "R4"
-text = "对缺失/非法 title、非法 id、非法 completed 值返回 400 与统一错误结构。"
-priority = "must"
-verify = "发送非法请求并检查错误响应。"
-
-[[requirements]]
-id = "R5"
-text = "读取/更新/删除不存在的 Todo 返回 404。"
-priority = "must"
-verify = "对不存在 id 调用各接口。"
-
-[[requirements]]
-id = "R6"
-text = "数据写入本地 JSON 文件，服务重启后数据仍存在。"
-priority = "must"
-verify = "创建数据、重启服务、再次读取。"
-
-[[requirements]]
-id = "R7"
-text = "提供自动化测试，覆盖 CRUD、校验、404 与持久化。"
-priority = "must"
-verify = "运行 npm test 并检查用例。"
-
-[[requirements]]
-id = "R8"
-text = "不得使用外部数据库或在线服务。"
-priority = "must"
-verify = "检查 package.json 与运行依赖。"
-
-[[acceptance]]
-id = "A1"
-text = "npm install 与 npm test 成功，测试全部通过。"
-method = "干净安装后运行测试。"
-
-[[acceptance]]
-id = "A2"
-text = "npm start 可启动服务，监听 8080 端口。"
-method = "启动后访问 /todos。"
-
-[[acceptance]]
-id = "A3"
-text = "CRUD、过滤、400、404 行为符合契约。"
-method = "评估 Agent 用 curl 独立验证。"
-
-[[acceptance]]
-id = "A4"
-text = "重启服务后已创建的数据仍可读取。"
-method = "创建记录后重启并再次查询。"
-
-[[acceptance]]
-id = "A5"
-text = "README.md 与 REPORT.md 真实、可复现。"
-method = "按 README 命令重跑。"
-
-[[deliverables]]
-path = "package.json"
-description = "依赖与 npm scripts"
-
-[[deliverables]]
-path = "src/"
-description = "服务端实现"
-
-[[deliverables]]
-path = "tests/"
-description = "自动化测试"
-
-[[deliverables]]
-path = "README.md"
-description = "接口文档与运行方式"
-
-[[deliverables]]
-path = "REPORT.md"
-description = "实际命令、测试结果与已知差异"
-
-[[deliverables]]
-path = "test-results/"
-description = "测试输出"
-
-[[constraints]]
-text = "仅使用本地 Node.js 与 npm 依赖，不依赖外部数据库或在线服务。"
-
-[[constraints]]
-text = "不得修改或删除 CONTRACT.md。"
-
-[[constraints]]
-text = "不得伪造测试或执行结果。"
+constraints = [
+  "只使用本地依赖，不依赖外部数据库或在线服务。",
+  "不得修改 CONTRACT.md，不得伪造测试或执行结果。",
+]
 
 [[rubric]]
-id = "api"
-name = "接口正确性"
-weight = 1.5
-description = "CRUD、过滤、状态码与响应结构是否符合契约。"
-evidence = "curl 记录、测试用例与响应体。"
-
-[[rubric]]
-id = "validation"
-name = "校验与错误处理"
-weight = 1
-description = "非法输入、404 与统一错误结构是否完整。"
-evidence = "非法请求的实际响应。"
-
-[[rubric]]
-id = "persistence"
-name = "持久化"
-weight = 1
-description = "重启后数据是否保留，写入是否可靠。"
-evidence = "重启前后的查询结果。"
-
-[[rubric]]
-id = "tests"
-name = "测试质量"
-weight = 1.5
-description = "测试是否真实、覆盖关键路径、可复现。"
-evidence = "npm test 输出与用例断言。"
+id = "functionality"
+name = "功能正确性"
+weight = 2.5
+description = "CRUD、过滤、错误处理与持久化是否符合目标。"
+evidence = "独立请求记录与测试结果。"
 
 [[rubric]]
 id = "quality"
 name = "工程质量"
-weight = 1
-description = "结构、依赖、可维护性与文档。"
-evidence = "代码走查与 README。"
+weight = 1.5
+description = "结构、依赖、测试与文档是否支撑可维护的交付。"
+evidence = "代码走查与项目自带测试。"
 
 [[rubric]]
 id = "honesty"
-name = "报告诚实度"
+name = "报告与自测"
 weight = 1
-description = "REPORT.md 与实际执行是否一致。"
-evidence = "抽查报告中的命令与结果。"
-
-[evaluation]
-notes = "必须亲自用 curl 验证接口，不能只依赖执行 Agent 的测试；持久化要通过重启服务验证。"
+description = "运行说明是否可复现，结果是否如实记录。"
+evidence = "抽查 REPORT.md 中的命令与输出。"

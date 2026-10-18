@@ -107,7 +107,7 @@ def _commands_block(task: Task) -> str:
         lines.append(f"- {key}：`{command}`")
     for item in task.extra_commands:
         lines.append(f"- {item['label']}：`{item['run']}`")
-    return _bullets(lines, "- （未定义命令）")
+    return "\n".join(lines)
 
 
 def _environment_block(task: Task) -> str:
@@ -118,7 +118,21 @@ def _environment_block(task: Task) -> str:
         lines.append(description)
     if notes:
         lines.append(notes)
-    return "\n".join(lines)
+    if lines:
+        return "\n".join(lines)
+
+    has_runtime_hints = bool(
+        task.commands
+        or task.extra_commands
+        or task.environment.get("url")
+        or task.environment.get("port")
+    )
+    if has_runtime_hints:
+        return ""
+    return (
+        "未指定固定技术栈、命令或运行地址；由执行 Agent 自行决定，"
+        "并在 REPORT.md 中说明如何运行和验证。"
+    )
 
 
 def _reference_block(task: Task) -> str:
@@ -195,7 +209,7 @@ def _test_step(task: Task) -> str:
     command = task.commands.get("test")
     if command:
         return f"运行契约中的测试命令 `{command}`，记录通过/失败；测试缺失或造假直接在该项记 0 分。"
-    return "契约未提供现成测试命令；请根据验收标准自行设计并运行独立验证，记录实际命令与输出。"
+    return "运行项目自带的测试；若没有现成测试，则按验收标准自行设计验证。记录实际命令与输出。"
 
 
 def _runtime_step(task: Task) -> str:
@@ -207,7 +221,10 @@ def _runtime_step(task: Task) -> str:
     command = task.commands.get("run") or task.commands.get("start") or task.commands.get("dev")
     if command:
         return f"按 `{command}` 启动或调用交付物，独立操作并验证验收标准，记录实际输入与输出。"
-    return "按验收标准直接运行或调用交付物，独立验证关键行为。"
+    return (
+        "查看工作区 README/REPORT 中记录的启动方式，独立启动或调用交付物；"
+        "若未记录，自行判断运行方式并说明。记录实际输入与输出。"
+    )
 
 
 def _sections_block(task: Task, audience: str) -> str:

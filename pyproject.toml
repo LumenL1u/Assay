@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-eval-kit"
+version = "0.1.0"
+description = "通用 Agent 任务评测框架：任务定义、提示词渲染与评分契约"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "agent-eval contributors" }]
+requires-python = ">=3.11"
+keywords = ["agent", "evaluation", "benchmark", "prompt", "llm", "task"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Software Development :: Testing",
+  "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+yaml = ["PyYAML>=6.0"]
+dev = ["build>=1.2.0", "ruff>=0.6.0"]
+
+[project.scripts]
+agent-eval = "evalkit.cli:main"
+
+# 发布到 GitHub 后取消注释，并替换为真实仓库地址：
+# [project.urls]
+# Homepage = "https://github.com/<owner>/agent-eval"
+# Repository = "https://github.com/<owner>/agent-eval"
+# Issues = "https://github.com/<owner>/agent-eval/issues"
+
+[tool.setuptools]
+packages = ["evalkit"]
+
+[tool.setuptools.package-data]
+evalkit = ["templates/*.md", "py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]

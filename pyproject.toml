@@ -28,16 +28,10 @@ dependencies = []
 
 [project.optional-dependencies]
 yaml = ["PyYAML>=6.0"]
-dev = ["build>=1.2.0", "ruff>=0.6.0"]
+dev = ["ruff>=0.6.0"]
 
 [project.scripts]
 agent-eval = "evalkit.cli:main"
-
-# 发布到 GitHub 后取消注释，并替换为真实仓库地址：
-# [project.urls]
-# Homepage = "https://github.com/<owner>/agent-eval"
-# Repository = "https://github.com/<owner>/agent-eval"
-# Issues = "https://github.com/<owner>/agent-eval/issues"
 
 [tool.setuptools]
 packages = ["evalkit", "evalkit.templates"]

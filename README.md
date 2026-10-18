@@ -5,6 +5,8 @@
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![GitHub](https://img.shields.io/badge/GitHub-Startanew7%2FAssay-181717.svg)](https://github.com/Startanew7/Assay)
 
+**简体中文** | [English](README.en.md)
+
 **Assay — 只定义目标，不规定路径的 Agent 能力评测框架。**
 
 用一份结构化任务定义，渲染出「任务契约 + 执行 Agent 指令 + 评估 Agent 指令」，用于评测网页复刻、后端 API、缺陷修复等不同类型的 Agent 任务。
@@ -85,7 +87,8 @@ assay/
 ├── out/                  # 渲染产物（可删除后重新生成）
 ├── pyproject.toml
 ├── LICENSE
-└── README.md
+├── README.md             # 中文说明
+└── README.en.md          # English documentation
 ```
 
 每个任务目录包含：

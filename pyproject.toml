@@ -34,9 +34,9 @@ dev = ["ruff>=0.6.0"]
 assay = "assay.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/LumenL1u/Assay"
-Repository = "https://github.com/LumenL1u/Assay"
-Issues = "https://github.com/LumenL1u/Assay/issues"
+Homepage = "https://github.com/Startanew7/Assay"
+Repository = "https://github.com/Startanew7/Assay"
+Issues = "https://github.com/Startanew7/Assay/issues"
 
 [tool.setuptools]
 packages = ["assay", "assay.templates"]

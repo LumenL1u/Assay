@@ -1,9 +1,9 @@
 # Assay
 
-[![CI](https://github.com/LumenL1u/Assay/actions/workflows/ci.yml/badge.svg)](https://github.com/LumenL1u/Assay/actions/workflows/ci.yml)
+[![CI](https://github.com/Startanew7/Assay/actions/workflows/ci.yml/badge.svg)](https://github.com/Startanew7/Assay/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![GitHub](https://img.shields.io/badge/GitHub-LumenL1u%2FAssay-181717.svg)](https://github.com/LumenL1u/Assay)
+[![GitHub](https://img.shields.io/badge/GitHub-Startanew7%2FAssay-181717.svg)](https://github.com/Startanew7/Assay)
 
 **Assay — 只定义目标，不规定路径的 Agent 能力评测框架。**
 
@@ -26,6 +26,13 @@ python3 -m assay list
 # 校验并渲染一个任务
 python3 -m assay validate --task mario-01
 python3 -m assay render --task mario-01 --check-paths
+
+# 渲染全部任务
+python3 -m assay render --all
+
+# 也可以安装为命令
+python3 -m pip install -e .
+assay list
 ```
 
 渲染产物：
@@ -40,19 +47,6 @@ out/mario-01/
 
 同时会在 `tasks/mario-01/workspace/CONTRACT.md` 写入一份只读契约。
 
-渲染全部任务：
-
-```bash
-python3 -m assay render --all
-```
-
-也可以安装为命令：
-
-```bash
-python3 -m pip install -e .
-assay list
-```
-
 ## 评测流程
 
 1. 在 `tasks/<id>/task.toml` 定义目标、需求、验收标准和评分维度。
@@ -62,6 +56,24 @@ assay list
 5. 评估 Agent 按评分表输出总分、证据和必须修复项。
 
 框架只负责定义、校验和生成提示词，不自动调用模型，也不提供沙箱。
+
+## 示例结果
+
+> 以下是一次真实运行样例，用于展示 Assay 的输入与输出形态。
+> 它不是基准分数，不代表其他模型或 Agent 的表现，也不用于跨运行比较。
+
+| 任务 | 执行结果 | 独立评估 | 等级 |
+| --- | --- | --- | --- |
+| `mario-01` | 可启动、可操作、可通关；项目自测 38/38 通过 | 8.3 / 10 | 良好 |
+
+![mario-01 通关画面](docs/results/mario-01/clear.png)
+
+*评估 Agent 独立运行时截取的通关画面。Super Mario Bros. 版权归 Nintendo 所有，截图仅用于展示评测输出。*
+
+- **运行信息**：2026-10-18；执行 Agent 与评估 Agent 为独立会话；任务定义见 `tasks/mario-01/task.toml`。
+- **证据**：[评估报告](docs/results/mario-01.md) · [执行报告](docs/results/mario-01/REPORT.md)
+- **说明**：原始证据（评估脚本、日志、截图）保留在本地 `eval-artifacts/`，未入库；`mario-01` 的素材与参考图因体积/版权原因也未入库，因此他人无法完整复跑该任务。
+- `todo-api-01`、`bugfix-csv-01` 尚未跑完整评估流程，故不列出结果。
 
 ## 目录结构
 
@@ -75,6 +87,7 @@ assay/
 │   ├── todo-api-01/      # 后端 API 实现
 │   └── bugfix-csv-01/    # 缺陷修复（带起始代码）
 ├── tests/                # 单元测试与 CLI 集成测试
+├── docs/results/         # 示例运行与评估报告
 ├── out/                  # 渲染产物（可删除后重新生成）
 ├── pyproject.toml
 ├── LICENSE

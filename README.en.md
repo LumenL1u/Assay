@@ -9,7 +9,19 @@
 
 **Assay — an agent evaluation framework that defines goals, not implementation paths.**
 
-From a single structured task definition, Assay renders a task contract, executor-agent instructions, and evaluator-agent instructions. It is designed for evaluating web replication, backend APIs, bug fixing, and other kinds of agent tasks.
+![mario-01 clear screen](docs/results/mario-01/clear.png)
+*Clear screen captured during an independent evaluation run. Super Mario Bros. is copyright Nintendo; the screenshot is used only to illustrate evaluation output.*
+
+
+| Task | Execution result | Independent evaluation | Grade |
+| --- | --- | --- | --- |
+| `mario-01` | Starts, plays, and can be completed; 38/38 project self-tests passed | 8.3 / 10 | Good |
+
+
+- **Run info**: 2026-10-18; execution and evaluation ran in separate sessions; task definition: `tasks/mario-01/task.toml`.
+- **Evidence**: [Evaluation report](docs/results/mario-01.md) · [Execution report](docs/results/mario-01/REPORT.md) (both currently in Chinese).
+- **Notes**: Raw evidence (evaluation scripts, logs, screenshots) is kept locally in `eval-artifacts/` and is not committed. `mario-01` assets and reference images are also excluded because of size and copyright, so others cannot fully reproduce this task.
+- `todo-api-01` and `bugfix-csv-01` have not gone through the full evaluation workflow, so no results are listed.
 
 ## Quick Start
 
@@ -52,24 +64,6 @@ A read-only copy of the contract is also written to `tasks/mario-01/workspace/CO
 5. The evaluator reports a total score, evidence, and required fixes according to the rubric.
 
 The framework only defines, validates, and generates prompts. It does not call models or provide a sandbox.
-
-## Sample Results
-
-> The following is a real sample run, shown to illustrate the shape of Assay's inputs and outputs.
-> It is not a benchmark score, does not represent other models or agents, and should not be used for cross-run comparison.
-
-| Task | Execution result | Independent evaluation | Grade |
-| --- | --- | --- | --- |
-| `mario-01` | Starts, plays, and can be completed; 38/38 project self-tests passed | 8.3 / 10 | Good |
-
-![mario-01 clear screen](docs/results/mario-01/clear.png)
-
-*Clear screen captured during an independent evaluation run. Super Mario Bros. is copyright Nintendo; the screenshot is used only to illustrate evaluation output.*
-
-- **Run info**: 2026-10-18; execution and evaluation ran in separate sessions; task definition: `tasks/mario-01/task.toml`.
-- **Evidence**: [Evaluation report](docs/results/mario-01.md) · [Execution report](docs/results/mario-01/REPORT.md) (both currently in Chinese).
-- **Notes**: Raw evidence (evaluation scripts, logs, screenshots) is kept locally in `eval-artifacts/` and is not committed. `mario-01` assets and reference images are also excluded because of size and copyright, so others cannot fully reproduce this task.
-- `todo-api-01` and `bugfix-csv-01` have not gone through the full evaluation workflow, so no results are listed.
 
 ## Project Structure
 
